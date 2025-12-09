@@ -52,3 +52,5 @@ Migrations/*Snapshot.cs
 
 */inputs/*
 */outputs/*
+
+*.vs

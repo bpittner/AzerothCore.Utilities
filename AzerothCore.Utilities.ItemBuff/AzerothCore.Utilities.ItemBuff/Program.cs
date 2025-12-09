@@ -1,0 +1,91 @@
+﻿using AzerothCore.Utilities.ItemBuff;
+using AzerothCore.Utilities.ItemBuff.Models;
+using AzerothCore.Utilities.ItemBuff.Services;
+using MySql.Data.MySqlClient;
+
+namespace AzerothCore.Utilities.ItemBuff
+{
+    internal class Program
+    {
+        static int BUFF_MULTIPLIER = 3; // 2
+        static int SPELL_BUFF_BONUS_MULTIPLIER = 3; // 3
+        static int STAM_BUFF_BONUS_MULTIPLIER = 3;
+        
+        static string INPUT_FILE_PATH = "C:\\tools\\wow\\item_buff\\input\\";
+        static string OUTPUT_FILE_PATH = "C:\\tools\\wow\\item_buff\\output\\";
+        
+        static string CONNECTION_STRING = "server=localhost;user=root;password=root;database=acore_world;";
+        static string QUERY_TEMPLATE = "SELECT * FROM item_template WHERE entry = @entry";
+
+        static async Task Main(string[] args)
+        {
+            var fileService = new FileService();
+            var spellLookupService = new SpellLookupService(fileService);
+            var itemBuffService = new ItemBuffService(spellLookupService, BUFF_MULTIPLIER, SPELL_BUFF_BONUS_MULTIPLIER, STAM_BUFF_BONUS_MULTIPLIER);
+
+            try
+            {
+                spellLookupService.LoadCache();
+
+                var filesToProcess = fileService.ListFiles(INPUT_FILE_PATH);
+
+                using (var connection = new MySqlConnection(CONNECTION_STRING))
+                {
+                    await connection.OpenAsync();
+
+
+                    foreach (var file in filesToProcess)
+                    {
+                        var insertStatementsBuffed = new List<String>();
+                        var insertStatementsBackup = new List<String>();
+
+                        var itemsToProcess = fileService.LoadItems(file);
+
+                        Console.WriteLine($"Processing file {file} with {itemsToProcess.Count} items");
+
+                        foreach (var item in itemsToProcess)
+                        {
+                            Console.WriteLine($"- Processing item {item}");
+
+                            using var command = new MySqlCommand(QUERY_TEMPLATE, connection);
+                            command.Parameters.AddWithValue("@entry", item);
+
+                            using var reader = command.ExecuteReader();
+
+                            if (reader.Read())
+                            {
+                                var itemTemplate = new ItemTemplate(reader);
+
+                                Console.WriteLine($"-- Found item '{itemTemplate.Name}'");
+
+                                insertStatementsBackup.Add(itemTemplate.GenerateInsertStatement());
+                                await itemBuffService.BuffItem(itemTemplate);
+                                insertStatementsBuffed.Add(itemTemplate.GenerateInsertStatement());
+
+                                Console.WriteLine($"-- Buff complete for '{itemTemplate.Name}'");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"-- No item found in database for '{item}'");
+                            }
+                        }
+
+                        spellLookupService.SaveCache();
+
+                        var shortFileName = file.Split('\\').Last();
+                        shortFileName = shortFileName.Split('.')[0] + ".sql";
+
+                        fileService.SaveQuery(insertStatementsBackup, OUTPUT_FILE_PATH + $"backups\\{shortFileName}");
+                        fileService.SaveQuery(insertStatementsBuffed, OUTPUT_FILE_PATH + $"buffs\\{shortFileName}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error processing item buffs");
+
+                Console.WriteLine(ex.ToString());
+            }
+        }
+    }
+}
