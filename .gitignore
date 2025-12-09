@@ -54,3 +54,4 @@ Migrations/*Snapshot.cs
 */outputs/*
 
 *.vs
+gha.txt
