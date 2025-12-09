@@ -49,3 +49,6 @@ secrets.json
 ## Entity Framework
 Migrations/*Designer.cs
 Migrations/*Snapshot.cs
+
+*/inputs/*
+*/outputs/*
