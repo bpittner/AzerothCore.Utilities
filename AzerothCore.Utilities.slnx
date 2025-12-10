@@ -1,6 +1,7 @@
 <Solution>
-  <Project Path="./AzerothCore.Utilities.CLootParse/AzerothCore.Utilities.CLootParse.csproj" />
-  <Project Path="./AzerothCore.Utilities.ItemBuff/AzerothCore.Utilities.ItemBuff.Models/AzerothCore.Utilities.ItemBuff.Models.csproj" />
-  <Project Path="./AzerothCore.Utilities.ItemBuff/AzerothCore.Utilities.ItemBuff.Services/AzerothCore.Utilities.ItemBuff.Services.csproj" />
-  <Project Path="./AzerothCore.Utilities.ItemBuff/AzerothCore.Utilities.ItemBuff/AzerothCore.Utilities.ItemBuff.csproj" />
+  <Project Path="AzerothCore.Utilities.CLootParse/AzerothCore.Utilities.CLootParse.csproj" />
+  <Project Path="AzerothCore.Utilities.DBTools/AzerothCore.Utilities.DBTools.csproj" Id="28456432-15eb-4f9c-b8ce-f562f987816d" />
+  <Project Path="AzerothCore.Utilities.ItemBuff/AzerothCore.Utilities.ItemBuff.Models/AzerothCore.Utilities.ItemBuff.Models.csproj" />
+  <Project Path="AzerothCore.Utilities.ItemBuff/AzerothCore.Utilities.ItemBuff.Services/AzerothCore.Utilities.ItemBuff.Services.csproj" />
+  <Project Path="AzerothCore.Utilities.ItemBuff/AzerothCore.Utilities.ItemBuff/AzerothCore.Utilities.ItemBuff.csproj" />
 </Solution>
