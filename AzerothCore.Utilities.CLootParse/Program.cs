@@ -20,26 +20,55 @@ namespace AzerothCore.Utilities.CLootParse
 
             foreach (var file in files)
             {
-
                 Console.WriteLine($"Processing file: {file.FullName}");
                 using var reader = new StreamReader(file.FullName);
 
-                var outFileName = $"outputs/{file.Name.Split(".")[0]}.txt";
 
-                using var outputFile = new StreamWriter(outFileName);
+                using var outputT4 = new StreamWriter($"outputs/{file.Name.Split(".")[0]}-t4.txt");
+                using var outputT5 = new StreamWriter($"outputs/{file.Name.Split(".")[0]}-t5.txt");
+                using var outputT6 = new StreamWriter($"outputs/{file.Name.Split(".")[0]}-t6.txt");
 
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                for(int i = 0; i < 18; i++)
                 {
-                    if (line.Contains("<a"))
+                    var line = reader.ReadLine();
+                    if(i < 5)
                     {
-                        string itemLine = reader.ReadLine();
-                        string itemId = itemLine.Split("=")[2].Trim().Replace("\"","");
-
-                        outputFile.WriteLine(itemId);
-                        Console.WriteLine($"{itemId}");
+                        outputT4.WriteLine(line);
                     }
+                    else if (i < 10)
+                    {
+                        outputT5.WriteLine(line);
+                    }
+                    else
+                    {
+                        outputT6.WriteLine(line);
+                    }
+
+                    Console.WriteLine(line);
                 }
+
+
+                // var outFileName = $"outputs/{file.Name.Split(".")[0]}.txt";
+
+                // using var outputFile = new StreamWriter(outFileName);
+
+                // string line;
+                // while ((line = reader.ReadLine()) != null)
+                // {
+                //     if (line.Contains("<a"))
+                //     {
+                //         string itemLine = reader.ReadLine();
+                //         string itemId = itemLine.Split("=")[2].Trim().Replace("\"","");
+
+                //         outputFile.WriteLine(itemId);
+                //         Console.WriteLine($"{itemId}");
+                //     }
+                // }
+
+
+
+
+
             }
         }
     }
