@@ -7,9 +7,14 @@ namespace AzerothCore.Utilities.ItemBuff
 {
     internal class Program
     {
-        static int BUFF_MULTIPLIER = 3; // 2
-        static int SPELL_BUFF_BONUS_MULTIPLIER = 3; // 3
-        static int STAM_BUFF_BONUS_MULTIPLIER = 3;
+        static int BUFF_MULTIPLIER = 2; // 2
+        static int SPELL_BUFF_BONUS_MULTIPLIER = 1; // 2
+
+        // 2 for T4, 3 for T5, 4 for T6
+        // T4: Karazhan, Gruul's Lair, Magtheridon's Lair
+        // T5: SSC, TK, Zul'Aman
+        // T6: Hyjal, BT, Sunwell Plateau
+        static int STAM_BUFF_BONUS_MULTIPLIER = 2; 
         
         static string INPUT_FILE_PATH = "C:\\tools\\wow\\item_buff\\input\\";
         static string OUTPUT_FILE_PATH = "C:\\tools\\wow\\item_buff\\output\\";
