@@ -411,7 +411,7 @@ namespace AzerothCore.Utilities.ItemBuff.Services
 
         private bool ShouldAddSpellAsStat(SpellDetails? spellDetails)
         {
-            return spellDetails != null && spellDetails.Stat != StatType.UNKNOWN && spellDetails.Stat != StatType.IGNORE;
+            return spellDetails != null && spellDetails.Stat != StatType.UNKNOWN && spellDetails.Stat != StatType.IGNORE && spellDetails.Value != 0;
         }
     }
 }

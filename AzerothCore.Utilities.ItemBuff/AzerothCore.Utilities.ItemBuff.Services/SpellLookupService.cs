@@ -188,6 +188,13 @@ namespace AzerothCore.Utilities.ItemBuff.Services
                 spell.Value = value;
                 spell.Stat = StatType.PARRY_RATING;
             }
+            else if (desc.Contains("armor penetration"))
+            {
+                int value = ParseSpellValue(description, false);
+
+                spell.Value = value;
+                spell.Stat = StatType.ARMOR_PENETRATION_RATING;
+            }
             else if (desc.Contains("pet"))
             {
                 spell.Stat = StatType.IGNORE;
@@ -223,6 +230,8 @@ namespace AzerothCore.Utilities.ItemBuff.Services
 
                 int intVal;
 
+
+                Console.WriteLine($"--- SpellLookupService - attempting to parse {stringVal} out of {description}");
                 if (Int32.TryParse(stringVal, out intVal))
                 {
                     return intVal;

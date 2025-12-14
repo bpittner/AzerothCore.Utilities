@@ -2,6 +2,7 @@
 using AzerothCore.Utilities.ItemBuff.Models;
 using AzerothCore.Utilities.ItemBuff.Services;
 using MySql.Data.MySqlClient;
+using System.Runtime.InteropServices;
 
 namespace AzerothCore.Utilities.ItemBuff
 {
@@ -14,7 +15,7 @@ namespace AzerothCore.Utilities.ItemBuff
         // T4: Karazhan, Gruul's Lair, Magtheridon's Lair
         // T5: SSC, TK, Zul'Aman
         // T6: Hyjal, BT, Sunwell Plateau
-        static int STAM_BUFF_BONUS_MULTIPLIER = 2; 
+        static int STAM_BUFF_BONUS_MULTIPLIER = 1; 
         
         static string INPUT_FILE_PATH = "C:\\tools\\wow\\item_buff\\input\\";
         static string OUTPUT_FILE_PATH = "C:\\tools\\wow\\item_buff\\output\\";
@@ -63,11 +64,18 @@ namespace AzerothCore.Utilities.ItemBuff
 
                                 Console.WriteLine($"-- Found item '{itemTemplate.Name}'");
 
-                                insertStatementsBackup.Add(itemTemplate.GenerateInsertStatement());
-                                await itemBuffService.BuffItem(itemTemplate);
-                                insertStatementsBuffed.Add(itemTemplate.GenerateInsertStatement());
+                                if(itemTemplate.Class == 2 || itemTemplate.Class == 4)
+                                {
+                                    insertStatementsBackup.Add(itemTemplate.GenerateInsertStatement());
+                                    await itemBuffService.BuffItem(itemTemplate);
+                                    insertStatementsBuffed.Add(itemTemplate.GenerateInsertStatement());
 
-                                Console.WriteLine($"-- Buff complete for '{itemTemplate.Name}'");
+                                    Console.WriteLine($"-- Buff complete for '{itemTemplate.Name}'");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"-- Skipping item '{itemTemplate.Name}' because it is not a weapon or armor (class 2 or 4). Item class is {itemTemplate.Class})");
+                                }
                             }
                             else
                             {
