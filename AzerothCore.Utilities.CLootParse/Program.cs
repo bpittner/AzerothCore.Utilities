@@ -24,7 +24,7 @@ namespace AzerothCore.Utilities.CLootParse
                 using var reader = new StreamReader(file.FullName);
 
 
-                using var outputT4 = new StreamWriter($"outputs/{file.Name.Split(".")[0]}-t4.txt");
+                /*using var outputT4 = new StreamWriter($"outputs/{file.Name.Split(".")[0]}-t4.txt");
                 using var outputT5 = new StreamWriter($"outputs/{file.Name.Split(".")[0]}-t5.txt");
                 using var outputT6 = new StreamWriter($"outputs/{file.Name.Split(".")[0]}-t6.txt");
 
@@ -45,30 +45,25 @@ namespace AzerothCore.Utilities.CLootParse
                     }
 
                     Console.WriteLine(line);
+                }*/
+
+
+                var outFileName = $"outputs/{file.Name.Split(".")[0]}.txt";
+
+                using var outputFile = new StreamWriter(outFileName);
+
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (line.Contains("<a"))
+                    {
+                        string itemLine = reader.ReadLine();
+                        string itemId = itemLine.Split("=")[2].Trim().Replace("\"","");
+
+                        outputFile.WriteLine(itemId);
+                        Console.WriteLine($"{itemId}");
+                    }
                 }
-
-
-                // var outFileName = $"outputs/{file.Name.Split(".")[0]}.txt";
-
-                // using var outputFile = new StreamWriter(outFileName);
-
-                // string line;
-                // while ((line = reader.ReadLine()) != null)
-                // {
-                //     if (line.Contains("<a"))
-                //     {
-                //         string itemLine = reader.ReadLine();
-                //         string itemId = itemLine.Split("=")[2].Trim().Replace("\"","");
-
-                //         outputFile.WriteLine(itemId);
-                //         Console.WriteLine($"{itemId}");
-                //     }
-                // }
-
-
-
-
-
             }
         }
     }
