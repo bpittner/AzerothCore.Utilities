@@ -18,6 +18,7 @@ namespace AzerothCore.Utilities.ItemBuff
         static int STAM_BUFF_BONUS_MULTIPLIER = 1; 
 
         static bool IS_CRAFTING_BUFF = false;
+
         static int CRAFTING_LEVEL_LIMIT = 70;
         
         static string INPUT_FILE_PATH = "C:\\tools\\wow\\item_buff\\input\\";
@@ -30,7 +31,7 @@ namespace AzerothCore.Utilities.ItemBuff
         {
             var fileService = new FileService();
             var spellLookupService = new SpellLookupService(fileService);
-            var itemBuffService = new ItemBuffService(spellLookupService, BUFF_MULTIPLIER, SPELL_BUFF_BONUS_MULTIPLIER, STAM_BUFF_BONUS_MULTIPLIER);
+            var itemBuffService = new ItemBuffService(spellLookupService, BUFF_MULTIPLIER, SPELL_BUFF_BONUS_MULTIPLIER, STAM_BUFF_BONUS_MULTIPLIER, IS_CRAFTING_BUFF, CRAFTING_LEVEL_LIMIT);
 
             try
             {
