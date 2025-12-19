@@ -17,7 +17,7 @@ namespace AzerothCore.Utilities.ItemBuff
         // T6: Hyjal, BT, Sunwell Plateau
         static int STAM_BUFF_BONUS_MULTIPLIER = 1; 
 
-        static bool IS_CRAFTING_BUFF = false;
+        static bool IS_CRAFTING_BUFF = true;
 
         static int CRAFTING_LEVEL_LIMIT = 70;
         
@@ -68,7 +68,13 @@ namespace AzerothCore.Utilities.ItemBuff
 
                                 Console.WriteLine($"-- Found item '{itemTemplate.Name}'");
 
-                                if(itemTemplate.Class == 2 || itemTemplate.Class == 4)
+                                if (IS_CRAFTING_BUFF && (itemTemplate.RequiredLevel < CRAFTING_LEVEL_LIMIT || itemTemplate.Quality < (byte)ItemQuality.EPIC))
+                                {
+                                    Console.WriteLine($"--- Skipping crafting item '{itemTemplate.Name}' with required level '{itemTemplate.RequiredLevel}' and quality '{itemTemplate.Quality}'");
+                                    continue;
+                                }
+
+                                if (itemTemplate.Class == 2 || itemTemplate.Class == 4)
                                 {
                                     insertStatementsBackup.Add(itemTemplate.GenerateInsertStatement());
                                     await itemBuffService.BuffItem(itemTemplate);
@@ -92,6 +98,9 @@ namespace AzerothCore.Utilities.ItemBuff
                         var shortFileName = file.Split('\\').Last();
                         shortFileName = shortFileName.Split('.')[0] + ".sql";
 
+
+                        Directory.CreateDirectory(OUTPUT_FILE_PATH + "backups");
+                        Directory.CreateDirectory(OUTPUT_FILE_PATH + "buffs");
                         fileService.SaveQuery(insertStatementsBackup, OUTPUT_FILE_PATH + $"backups\\{shortFileName}");
                         fileService.SaveQuery(insertStatementsBuffed, OUTPUT_FILE_PATH + $"buffs\\{shortFileName}");
                     }

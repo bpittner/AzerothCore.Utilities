@@ -25,12 +25,6 @@ namespace AzerothCore.Utilities.ItemBuff.Services
 
         public async Task BuffItem(ItemTemplate item)
         {
-            if(_isCraftingBuff && item.RequiredLevel < _craftingLevelLimit && item.Quality >= (byte)ItemQuality.EPIC)
-            {
-                Console.WriteLine($"--- ItemBuffService - skipping crafting item '{item.Name}' with required level {item.RequiredLevel}");
-                return;
-            }
-
             if (item.SpellId1 != 0)
             {
                 var spellDetails = await _spellLookupService.GetSpellValue(item.SpellId1);
@@ -105,6 +99,11 @@ namespace AzerothCore.Utilities.ItemBuff.Services
                 || item.Name.ToLower().Contains("redemption"))
             {
                 AddPaladinStats(item);
+            }
+
+            if(item.RequiredSpell != 0 && _isCraftingBuff)
+            {
+                item.RequiredSpell = 0;
             }
 
             BuffStats(item);
