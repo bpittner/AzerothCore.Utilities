@@ -10,17 +10,26 @@ namespace AzerothCore.Utilities.ItemBuff.Services
         private readonly int _multiplier;
         private readonly int _spell_bonus_multiplier;
         private readonly int _stam_bonus_multiplier;
+        private readonly bool _isCraftingBuff;
+        private readonly int _craftingLevelLimit;
 
-        public ItemBuffService(SpellLookupService spellLookupService, int multipler, int spell_bonus_multiplier, int stam_bonus_multiplier)
+        public ItemBuffService(SpellLookupService spellLookupService, int multipler, int spell_bonus_multiplier, int stam_bonus_multiplier, bool isCraftingBuff, int craftingLevelLimit)
         {
             _spellLookupService = spellLookupService;
             _multiplier = multipler;
             _spell_bonus_multiplier = spell_bonus_multiplier;
             _stam_bonus_multiplier = stam_bonus_multiplier;
+            _isCraftingBuff = isCraftingBuff;
+            _craftingLevelLimit = craftingLevelLimit;
         }
 
         public async Task BuffItem(ItemTemplate item)
         {
+            if(_isCraftingBuff && item.RequiredLevel < _craftingLevelLimit && item.Quality >= (byte)ItemQuality.EPIC)
+            {
+                Console.WriteLine($"--- ItemBuffService - skipping crafting item '{item.Name}' with required level {item.RequiredLevel}");
+                return;
+            }
 
             if (item.SpellId1 != 0)
             {

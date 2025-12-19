@@ -16,6 +16,9 @@ namespace AzerothCore.Utilities.ItemBuff
         // T5: SSC, TK, Zul'Aman
         // T6: Hyjal, BT, Sunwell Plateau
         static int STAM_BUFF_BONUS_MULTIPLIER = 1; 
+
+        static bool IS_CRAFTING_BUFF = false;
+        static int CRAFTING_LEVEL_LIMIT = 70;
         
         static string INPUT_FILE_PATH = "C:\\tools\\wow\\item_buff\\input\\";
         static string OUTPUT_FILE_PATH = "C:\\tools\\wow\\item_buff\\output\\";
